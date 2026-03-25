@@ -6,10 +6,11 @@
     <title>Nguyễn Hoài Nam - Bio</title>
     
     <script>
+        // CẤU HÌNH THÔNG TIN - HÃY KIỂM TRA KỸ TÊN FILE (CHỮ HOA/THƯỜNG)
         const USER_CONFIG = {
             userName: "Nguyễn Hoài Nam",
-            videoFile: "bg-video.mp4", // Đảm bảo file nằm cùng thư mục
-            musicFile: "music.mp3",    // Đảm bảo file nằm cùng thư mục
+            videoFile: "./bg-video.mp4", // Thêm ./ để ép đọc đúng thư mục gốc
+            musicFile: "./music.mp3",    
             links: [
                 { label: "TIKTOK (ACC PHỤ)", url: "https://www.tiktok.com/@hnamnthichtin" },
                 { label: "THREAD",           url: "https://www.threads.com/@ivan_namnefen" },
@@ -20,13 +21,13 @@
             ]
         };
     </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --army-green: #2d3926;
             --gold: #ffcc00;
-            --gold-glow: rgba(255, 204, 0, 0.5);
-            --dark-overlay: rgba(0, 0, 0, 0.6);
+            --dark-overlay: rgba(0, 0, 0, 0.65);
         }
 
         body, html {
@@ -35,14 +36,13 @@
             background-color: #000;
         }
 
-        /* Video nền - Ép hiển thị toàn màn hình */
+        /* Ép video phủ kín màn hình */
         #bg-video {
             position: fixed; top: 50%; left: 50%;
             min-width: 100%; min-height: 100%;
             width: auto; height: auto;
             z-index: -2; transform: translate(-50%, -50%);
             object-fit: cover;
-            background-color: #000;
         }
 
         .overlay {
@@ -59,31 +59,31 @@
             position: relative; z-index: 10;
         }
 
+        .star-main { font-size: 35px; color: var(--gold); text-shadow: 0 0 15px var(--gold); }
+
         h1 {
             font-size: 2.5rem; text-transform: uppercase;
-            margin: 10px 0 30px; letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--gold-glow);
-            animation: breathe 3s ease-in-out infinite;
+            margin: 15px 0 35px; letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+            animation: breathe 3s infinite;
         }
 
         @keyframes breathe {
             0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; text-shadow: 0 0 25px var(--gold); }
+            50% { transform: scale(1.03); opacity: 1; }
         }
 
-        .links-container { width: 90%; max-width: 400px; }
+        .links-container { width: 85%; max-width: 400px; }
 
-        /* Nút bấm Pill-shaped phong cách Quân đội */
         .btn {
             display: block; background: var(--army-green);
             color: var(--gold); text-decoration: none;
-            padding: 15px; margin: 15px 0;
+            padding: 16px; margin: 15px 0;
             border-radius: 50px; border: 2px solid var(--gold);
             font-weight: bold; text-transform: uppercase;
-            text-align: center; transition: 0.4s;
+            text-align: center; transition: 0.3s;
             box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-            opacity: 0; transform: translateY(20px);
-            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0; animation: fadeInUp 0.5s ease forwards;
         }
 
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
@@ -93,107 +93,102 @@
             box-shadow: 0 0 20px var(--gold); transform: scale(1.05);
         }
 
-        /* Nút Mute tinh tế */
         #mute-btn {
             position: fixed; bottom: 20px; right: 20px;
-            background: rgba(0,0,0,0.5); color: var(--gold);
-            border: 1px solid var(--gold); padding: 10px 15px;
+            background: rgba(0,0,0,0.6); color: var(--gold);
+            border: 1px solid var(--gold); padding: 10px 20px;
             border-radius: 30px; cursor: pointer; z-index: 100;
-            font-size: 0.9rem; transition: 0.3s;
         }
-        #mute-btn:hover { background: var(--gold); color: var(--army-green); }
 
-        .star-icon { font-size: 40px; color: var(--gold); text-shadow: 0 0 15px var(--gold); }
-
-        /* Hiệu ứng sao bay nền */
-        #star-field { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        .star { position: absolute; color: var(--gold); opacity: 0; animation: starMove linear infinite; }
+        /* Sao bay nền */
+        .star { position: absolute; color: var(--gold); opacity: 0; animation: starMove linear infinite; pointer-events: none; }
         @keyframes starMove {
-            0% { transform: translateY(110vh); opacity: 0; }
-            50% { opacity: 0.7; }
-            100% { transform: translateY(-10vh); opacity: 0; }
+            0% { transform: translateY(105vh); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-5vh); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop playsinline id="bg-video">
-        <source id="video-source" type="video/mp4">
+    <video autoplay muted loop playsinline id="bg-video" preload="auto">
+        <source src="" id="v-src" type="video/mp4">
     </video>
 
     <div class="overlay"></div>
     <div id="star-field"></div>
     
-    <audio id="bg-music" loop>
-        <source id="music-source" type="audio/mpeg">
+    <audio id="bg-music" loop preload="auto">
+        <source src="" id="m-src" type="audio/mpeg">
     </audio>
 
-    <button id="mute-btn">🎵 BẬT NHẠC</button>
+    <button id="mute-btn">🔇 TẮT NHẠC</button>
 
     <div class="container">
-        <div class="star-icon">★</div>
+        <div class="star-main">★</div>
         <h1 id="display-name"></h1>
         <div class="links-container" id="links-list"></div>
     </div>
 
     <script>
-        // Load cấu hình
-        document.getElementById('display-name').innerText = USER_CONFIG.userName;
-        document.getElementById('video-source').src = USER_CONFIG.videoFile;
-        document.getElementById('music-source').src = USER_CONFIG.musicFile;
-        
-        const video = document.getElementById('bg-video');
-        const music = document.getElementById('bg-music');
-        video.load(); // Ép video load lại link mới
-        music.load();
+        // Khởi tạo dữ liệu
+        const v = document.getElementById('bg-video');
+        const m = document.getElementById('bg-music');
+        const vSrc = document.getElementById('v-src');
+        const mSrc = document.getElementById('m-src');
 
-        // Tạo nút bấm với hiệu ứng trễ (delay)
-        const listContainer = document.getElementById('links-list');
-        USER_CONFIG.links.forEach((link, index) => {
+        document.getElementById('display-name').innerText = USER_CONFIG.userName;
+        
+        // Gán link file và ép trình duyệt load lại
+        vSrc.src = USER_CONFIG.videoFile;
+        mSrc.src = USER_CONFIG.musicFile;
+        v.load();
+        m.load();
+
+        // Tạo nút bấm
+        const list = document.getElementById('links-list');
+        USER_CONFIG.links.forEach((l, i) => {
             const a = document.createElement('a');
-            a.href = link.url;
-            a.className = 'btn';
-            a.target = "_blank";
-            a.innerText = link.label;
-            a.style.animationDelay = (0.2 * index) + "s";
-            listContainer.appendChild(a);
+            a.href = l.url; a.className = 'btn'; a.target = "_blank"; a.innerText = l.label;
+            a.style.animationDelay = (i * 0.15) + "s";
+            list.appendChild(a);
         });
 
-        // Tạo sao bay ngẫu nhiên
-        for (let i = 0; i < 15; i++) {
-            const s = document.createElement('div');
-            s.className = 'star';
-            s.innerText = '★';
-            s.style.left = Math.random() * 100 + "vw";
-            s.style.animationDuration = (Math.random() * 5 + 5) + "s";
-            s.style.animationDelay = (Math.random() * 5) + "s";
-            s.style.fontSize = (Math.random() * 10 + 10) + "px";
+        // Tạo hiệu ứng sao
+        for(let i=0; i<12; i++) {
+            let s = document.createElement('div');
+            s.className = 'star'; s.innerText = '★';
+            s.style.left = Math.random()*100 + "vw";
+            s.style.animationDuration = (Math.random()*4 + 4) + "s";
+            s.style.animationDelay = (Math.random()*5) + "s";
             document.getElementById('star-field').appendChild(s);
         }
 
-        // Xử lý bật nhạc/video khi click
-        const muteBtn = document.getElementById('mute-btn');
-        document.body.addEventListener('click', () => {
-            if (video.paused) video.play();
-            if (music.paused) {
-                music.play();
-                muteBtn.innerText = "🔊 TẮT NHẠC";
-            }
-        }, { once: true });
+        // Xử lý Audio & Video Playback
+        const btn = document.getElementById('mute-btn');
+        let audioStarted = false;
 
-        muteBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (music.paused) {
-                music.play();
-                muteBtn.innerText = "🔊 TẮT NHẠC";
-            } else {
-                music.pause();
-                muteBtn.innerText = "🎵 BẬT NHẠC";
+        const startMedia = () => {
+            if (!audioStarted) {
+                v.play().catch(e => console.log("Video chờ tương tác"));
+                m.play().then(() => {
+                    audioStarted = true;
+                    btn.innerText = "🔊 NHẠC ĐANG PHÁT";
+                }).catch(e => console.log("Audio chờ tương tác"));
             }
+        };
+
+        // Lắng nghe click toàn trang để kích hoạt
+        document.body.addEventListener('click', startMedia, { once: true });
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (m.paused) { m.play(); btn.innerText = "🔊 NHẠC ĐANG PHÁT"; }
+            else { m.pause(); btn.innerText = "🔇 ĐÃ TẮT NHẠC"; }
         });
 
-        // Ép video play lại nếu trình duyệt tạm dừng do tiết kiệm pin
-        video.addEventListener('suspend', () => { video.play(); });
+        // Ép video luôn chạy ngay cả khi trình duyệt cố tạm dừng
+        setInterval(() => { if (v.paused) v.play(); }, 1000);
     </script>
 </body>
-</html>                
+</html>           
